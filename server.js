@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Helper method for generating unique ids
-const uuid = require('./helpers/uuid');
+const uuid = require('./Develop/helpers/uuid');
 
 const PORT = process.env.PORT || 3001;
 
@@ -17,15 +17,15 @@ app.use(express.static('public'));
 
 // HTML routes
 app.get('/', (req, res) =>
-	res.sendFile(path.join(__dirname, 'public/index.html'))
+	res.sendFile(path.join(__dirname, './Develop/public/index.html'))
 );
 
 app.get('/notes', (req, res) =>
-	res.sendFile(path.join(__dirname, 'public/notes.html'))
+	res.sendFile(path.join(__dirname, './Develop/public/notes.html'))
 );
 
 app.get('*', (req, res) =>
-	res.sendFile(path.join(__dirname, 'public/index.html'))
+	res.sendFile(path.join(__dirname, './Develop/public/index.html'))
 );
 
 // Get request for notes
@@ -56,7 +56,7 @@ app.post('/api/notes', (req, res) => {
 		};
 
 		// Obtain existing reviews
-		fs.readFile('./db/notes.json', 'utf8', (err, data) => {
+		fs.readFile('./Develop./db/notes.json', 'utf8', (err, data) => {
 			if (err) {
 				console.error(err);
 			} else {
@@ -67,8 +67,7 @@ app.post('/api/notes', (req, res) => {
 				parsedNotes.push(newNote);
 
 				// Write updated notes back to the file
-				fs.writeFile(
-					'./db/notes.json',
+				fs.writeFile('./Develop/./db/notes.json',
 					JSON.stringify(parsedNotes, null, 3),
 					(writeErr) =>
 						writeErr
