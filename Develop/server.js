@@ -2,8 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
-// Helper method for generating unique ids
-const uuid = require('./helpers/uuid');
+
+const { v4: uuidv4 } = require('uuid');
 
 const PORT = process.env.PORT || 3001;
 
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 
-// HTML routes
+
 app.get('/', (req, res) =>
 	res.sendFile(path.join(__dirname, 'public/index.html'))
 );
@@ -24,11 +24,6 @@ app.get('/notes', (req, res) =>
 	res.sendFile(path.join(__dirname, 'public/notes.html'))
 );
 
-app.get('*', (req, res) =>
-	res.sendFile(path.join(__dirname, 'public/index.html'))
-);
-
-// API Routes
 
 // GET request to receive note
 app.get('/api/notes', (req, res) => {
@@ -57,7 +52,7 @@ app.post('/api/notes', (req, res) => {
 		const newNote = {
 			title,
 			text,
-			review_id: uuid(),
+			review_id: uuidv4(),
 		};
 
 
@@ -90,6 +85,11 @@ app.post('/api/notes', (req, res) => {
 		res.status(500).json('Error in posting notes');
 	}
 });
+
+
+app.get('*', (req, res) =>
+	res.sendFile(path.join(__dirname, 'public/index.html'))
+);
 
 app.listen(PORT, () =>
 	console.log(`app listening at http://localhost:${PORT}`)
