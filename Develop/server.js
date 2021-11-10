@@ -28,20 +28,25 @@ app.get('*', (req, res) =>
 	res.sendFile(path.join(__dirname, 'public/index.html'))
 );
 
-// Get request for notes
+// API Routes
+
+// GET request to receive note
 app.get('/api/notes', (req, res) => {
-
-	// Send a message to the client
-	res.status(200).json(`${req.method} request received to get reviews`);
-
-	// Log our request to the terminal
-	console.info(`${req.method} request received to get notes`);
+	fs.readFile('./db/notes.json', 'utf8', (err, data) => {
+		if (err) {
+			console.error(err);
+		} else {
+			res.json(JSON.parse(data));
+			console.info(`${req.method} request received to get notes`);
+		}
+	})
 });
 
 // POST request to add a note
 app.post('/api/notes', (req, res) => {
 	// Log that a POST request was received
 	console.info(`${req.method} request received to add a note`);
+
 
 	// Destructuring assignment for the items in req.body
 	const { title, text } = req.body;
@@ -55,21 +60,17 @@ app.post('/api/notes', (req, res) => {
 			review_id: uuid(),
 		};
 
-		// Obtain existing reviews
+
 		fs.readFile('./db/notes.json', 'utf8', (err, data) => {
 			if (err) {
 				console.error(err);
 			} else {
 				// Convert string into JSON object
 				const parsedNotes = JSON.parse(data);
-
 				// Add a new note
 				parsedNotes.push(newNote);
-
-				// Write updated notes back to the file
-				fs.writeFile(
-					'./db/notes.json',
-					JSON.stringify(parsedNotes, null, 3),
+				// Write updated notes to the file
+				fs.writeFile('./db/notes.json', JSON.stringify(parsedNotes, null, 3),
 					(writeErr) =>
 						writeErr
 							? console.error(writeErr)
@@ -86,7 +87,7 @@ app.post('/api/notes', (req, res) => {
 		console.log(response);
 		res.status(201).json(response);
 	} else {
-		res.status(500).json('Error in posting review');
+		res.status(500).json('Error in posting notes');
 	}
 });
 
