@@ -5,7 +5,7 @@
 This is a note-taker-app where users can enter notes, with a title and message. All you need to do is install npm, and run node server. This was created with JavaScript and using Node.js along with the express, uuid and fs packages.
 
 ##URL 
-still working on deploying to heroku
+https://still-island-86586.herokuapp.com
 
 ##Credits
 ask bcs
